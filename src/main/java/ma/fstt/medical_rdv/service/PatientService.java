@@ -1,3 +1,4 @@
+
 package ma.fstt.medical_rdv.service;
 
 import ma.fstt.medical_rdv.entity.Patient;
@@ -19,28 +20,32 @@ public class PatientService {
     @Autowired
     private RendezVousRepository rendezVousRepository;
 
-    // Ajouter ou modifier un patient
     public Patient save(Patient patient) {
         return patientRepository.save(patient);
     }
 
-    // Rechercher un patient par ID
+    public RendezVous prendreRendezVous(RendezVous rendezVous) {
+        rendezVous.setStatut(false); // en attente de confirmation par le médecin
+        return rendezVousRepository.save(rendezVous);
+    }
+
+    public void annulerRendezVous(Long rendezVousId) {
+        rendezVousRepository.deleteById(rendezVousId);
+    }
+
+    public List<RendezVous> consulterRendezVous(Patient patient) {
+        return rendezVousRepository.findByPatient(patient);
+    }
+
     public Optional<Patient> findById(Long id) {
         return patientRepository.findById(id);
     }
 
-    // Afficher tous les patients
     public List<Patient> findAll() {
         return patientRepository.findAll();
     }
 
-    // Supprimer un patient
     public void deleteById(Long id) {
         patientRepository.deleteById(id);
-    }
-
-    // Consulter les rendez-vous d'un patient
-    public List<RendezVous> consulterMesRendezVous(Patient patient) {
-        return rendezVousRepository.findByPatient(patient);
     }
 }
