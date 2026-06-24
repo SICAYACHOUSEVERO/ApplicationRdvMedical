@@ -1,12 +1,13 @@
 package ma.fstt.medical_rdv.service;
 
+import ma.fstt.medical_rdv.entity.Medecin;
 import ma.fstt.medical_rdv.entity.User;
+import ma.fstt.medical_rdv.repository.MedecinRepository;
 import ma.fstt.medical_rdv.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AdminService {
@@ -14,23 +15,30 @@ public class AdminService {
     @Autowired
     private UserRepository userRepository;
 
-    // Ajouter ou modifier un utilisateur
-    public User save(User user) {
-        return userRepository.save(user);
-    }
+    @Autowired
+    private MedecinRepository medecinRepository;
 
-    // Rechercher un utilisateur par ID
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    // Afficher tous les utilisateurs
-    public List<User> findAll() {
+    public List<User> gererUtilisateur() {
         return userRepository.findAll();
     }
 
-    // Supprimer un utilisateur
-    public void deleteById(Long id) {
+    public void supprimerUtilisateur(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public List<Medecin> gererMedecin() {
+        return medecinRepository.findAll();
+    }
+
+    public Medecin ajouterMedecin(Medecin medecin) {
+        return medecinRepository.save(medecin);
+    }
+
+    public void supprimerMedecin(Long id) {
+        medecinRepository.deleteById(id);
+    }
+
+    public long consulterStat() {
+        return userRepository.count();
     }
 }
