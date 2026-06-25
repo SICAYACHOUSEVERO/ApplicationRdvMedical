@@ -30,8 +30,17 @@ public class PatientService {
     }
 
     public void annulerRendezVous(Long rendezVousId) {
-        rendezVousRepository.deleteById(rendezVousId);
+    RendezVous rdv = rendezVousRepository.findById(rendezVousId)
+            .orElseThrow(() -> new RuntimeException("Rendez-vous introuvable avec id : " + rendezVousId));
+
+    // Libérer la disponibilité associée avant de supprimer le rendez-vous
+    if (rdv.getDisponibilite() != null) {
+        rdv.setDisponibilite(null);
+        rendezVousRepository.save(rdv);
     }
+
+    rendezVousRepository.deleteById(rendezVousId);
+}
 
     public List<RendezVous> consulterRendezVous(Patient patient) {
         return rendezVousRepository.findByPatient(patient);
