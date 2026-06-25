@@ -1,5 +1,6 @@
 package ma.fstt.medical_rdv.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -17,10 +18,12 @@ public class Disponibilite {
 
     private int heureFin;
 
+    @JsonIgnoreProperties({"disponibiliteList", "rendezVousList", "motDePasse"})
     @ManyToOne
     @JoinColumn(name = "medecin_id", nullable = false)
     private Medecin medecin;
 
+    @JsonIgnoreProperties({"disponibilite", "consultation", "patient", "medecin"})
     @OneToOne(mappedBy = "disponibilite")
     private RendezVous rendezVous;
 

@@ -1,5 +1,6 @@
 package ma.fstt.medical_rdv.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -11,9 +12,11 @@ public class Medecin extends User {
 
     private String cabinet;
 
+    @JsonIgnoreProperties({"patient", "medecin"})
     @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL)
     private List<RendezVous> rendezVousList;
 
+    @JsonIgnoreProperties({"medecin", "rendezVous"})
     @OneToMany(mappedBy = "medecin", cascade = CascadeType.ALL)
     private List<Disponibilite> disponibiliteList;
 

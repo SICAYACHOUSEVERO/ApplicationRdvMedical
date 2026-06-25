@@ -1,5 +1,6 @@
 package ma.fstt.medical_rdv.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +17,7 @@ public class Consultation {
 
     private String notes;
 
+    @JsonIgnoreProperties({"consultation", "patient", "medecin", "disponibilite"})
     @OneToOne
     @JoinColumn(name = "rendez_vous_id", nullable = false)
     private RendezVous rendezVous;

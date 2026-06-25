@@ -1,5 +1,6 @@
 package ma.fstt.medical_rdv.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -19,17 +20,21 @@ public class RendezVous {
 
     private String motif;
 
+    @JsonIgnoreProperties({"rendezVousList", "motDePasse"})
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
+    @JsonIgnoreProperties({"rendezVousList", "disponibiliteList", "motDePasse"})
     @ManyToOne
     @JoinColumn(name = "medecin_id", nullable = false)
     private Medecin medecin;
 
+    @JsonIgnoreProperties("rendezVous")
     @OneToOne(mappedBy = "rendezVous", cascade = CascadeType.ALL)
     private Consultation consultation;
 
+    @JsonIgnoreProperties("rendezVous")
     @OneToOne
     @JoinColumn(name = "disponibilite_id")
     private Disponibilite disponibilite;
