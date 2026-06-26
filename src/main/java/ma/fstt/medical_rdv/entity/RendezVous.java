@@ -16,7 +16,7 @@ public class RendezVous {
 
     private int heure;
 
-    private boolean statut;
+    private String statut; // "EN_ATTENTE", "CONFIRME", "REFUSE"
 
     private String motif;
 
@@ -65,11 +65,11 @@ public class RendezVous {
         this.heure = heure;
     }
 
-    public boolean isStatut() {
-        return statut;
+    public String getStatut() {
+    return statut;
     }
 
-    public void setStatut(boolean statut) {
+    public void setStatut(String statut) {
         this.statut = statut;
     }
 

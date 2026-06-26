@@ -17,22 +17,22 @@ public class RendezVousService {
     private RendezVousRepository rendezVousRepository;
 
     public RendezVous creerRendezVous(RendezVous rendezVous) {
-        rendezVous.setStatut(false); // false = en attente de confirmation
-        return rendezVousRepository.save(rendezVous);
+    rendezVous.setStatut("EN_ATTENTE");
+    return rendezVousRepository.save(rendezVous);
     }
 
     public RendezVous confirmerRendezVous(Long id) {
-        RendezVous rdv = rendezVousRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Rendez-vous introuvable avec id : " + id));
-        rdv.setStatut(true); // true = confirmé
-        return rendezVousRepository.save(rdv);
+    RendezVous rdv = rendezVousRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Rendez-vous introuvable avec id : " + id));
+    rdv.setStatut("CONFIRME");
+    return rendezVousRepository.save(rdv);
     }
 
     public RendezVous refuserRendezVous(Long id) {
-        RendezVous rdv = rendezVousRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Rendez-vous introuvable avec id : " + id));
-        rdv.setStatut(false);
-        return rendezVousRepository.save(rdv);
+    RendezVous rdv = rendezVousRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Rendez-vous introuvable avec id : " + id));
+    rdv.setStatut("REFUSE");
+    return rendezVousRepository.save(rdv);
     }
 
     public void annulerRendezVous(Long id) {

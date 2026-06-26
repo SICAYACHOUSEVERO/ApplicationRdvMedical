@@ -30,26 +30,26 @@ class RendezVousServiceTest {
     void setUp() {
         rendezVous = new RendezVous();
         rendezVous.setId(1L);
-        rendezVous.setStatut(false);
+        rendezVous.setStatut("EN_ATTENTE");
         rendezVous.setMotif("Consultation de routine");
     }
 
     @Test
-    void creerRendezVous_devraitForcerStatutAFalse() {
+    void creerRendezVous_devraitForcerStatutAEnAttente() {
         // Arrange
-        rendezVous.setStatut(true); // on tente de forcer "confirmé" à la création
+        rendezVous.setStatut("CONFIRME"); // on tente de forcer "confirmé" à la création
         when(rendezVousRepository.save(any(RendezVous.class))).thenReturn(rendezVous);
 
         // Act
         RendezVous resultat = rendezVousService.creerRendezVous(rendezVous);
 
         // Assert
-        assertThat(resultat.isStatut()).isFalse();
+        assertThat(resultat.getStatut()).isEqualTo("EN_ATTENTE");
         verify(rendezVousRepository, times(1)).save(rendezVous);
     }
 
     @Test
-    void confirmerRendezVous_devraitMettreStatutATrue() {
+    void confirmerRendezVous_devraitMettreStatutAConfirme() {
         // Arrange
         when(rendezVousRepository.findById(1L)).thenReturn(Optional.of(rendezVous));
         when(rendezVousRepository.save(any(RendezVous.class))).thenReturn(rendezVous);
@@ -58,7 +58,7 @@ class RendezVousServiceTest {
         RendezVous resultat = rendezVousService.confirmerRendezVous(1L);
 
         // Assert
-        assertThat(resultat.isStatut()).isTrue();
+        assertThat(resultat.getStatut()).isEqualTo("CONFIRME");
         verify(rendezVousRepository).save(rendezVous);
     }
 
@@ -74,9 +74,9 @@ class RendezVousServiceTest {
     }
 
     @Test
-    void refuserRendezVous_devraitMettreStatutAFalse() {
+    void refuserRendezVous_devraitMettreStatutARefuse() {
         // Arrange
-        rendezVous.setStatut(true);
+        rendezVous.setStatut("CONFIRME");
         when(rendezVousRepository.findById(1L)).thenReturn(Optional.of(rendezVous));
         when(rendezVousRepository.save(any(RendezVous.class))).thenReturn(rendezVous);
 
@@ -84,15 +84,15 @@ class RendezVousServiceTest {
         RendezVous resultat = rendezVousService.refuserRendezVous(1L);
 
         // Assert
-        assertThat(resultat.isStatut()).isFalse();
+        assertThat(resultat.getStatut()).isEqualTo("REFUSE");
     }
 
-    @Test
-    void annulerRendezVous_devraitAppelerDeleteById() {
-        // Act
-        rendezVousService.annulerRendezVous(1L);
+   @Test
+   void annulerRendezVous_devraitAppelerDeleteById() {
+       // Act
+       rendezVousService.annulerRendezVous(1L);
 
-        // Assert
-        verify(rendezVousRepository, times(1)).deleteById(1L);
+       // Assert
+       verify(rendezVousRepository, times(1)).deleteById(1L);
     }
 }

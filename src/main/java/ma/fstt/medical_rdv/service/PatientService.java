@@ -1,4 +1,3 @@
-
 package ma.fstt.medical_rdv.service;
 
 import ma.fstt.medical_rdv.entity.Patient;
@@ -25,22 +24,22 @@ public class PatientService {
     }
 
     public RendezVous prendreRendezVous(RendezVous rendezVous) {
-        rendezVous.setStatut(false); // en attente de confirmation par le médecin
+        rendezVous.setStatut("EN_ATTENTE");
         return rendezVousRepository.save(rendezVous);
     }
 
     public void annulerRendezVous(Long rendezVousId) {
-    RendezVous rdv = rendezVousRepository.findById(rendezVousId)
-            .orElseThrow(() -> new RuntimeException("Rendez-vous introuvable avec id : " + rendezVousId));
+        RendezVous rdv = rendezVousRepository.findById(rendezVousId)
+                .orElseThrow(() -> new RuntimeException("Rendez-vous introuvable avec id : " + rendezVousId));
 
-    // Libérer la disponibilité associée avant de supprimer le rendez-vous
-    if (rdv.getDisponibilite() != null) {
-        rdv.setDisponibilite(null);
-        rendezVousRepository.save(rdv);
+        // Libérer la disponibilité associée avant de supprimer le rendez-vous
+        if (rdv.getDisponibilite() != null) {
+            rdv.setDisponibilite(null);
+            rendezVousRepository.save(rdv);
+        }
+
+        rendezVousRepository.deleteById(rendezVousId);
     }
-
-    rendezVousRepository.deleteById(rendezVousId);
-}
 
     public List<RendezVous> consulterRendezVous(Patient patient) {
         return rendezVousRepository.findByPatient(patient);
