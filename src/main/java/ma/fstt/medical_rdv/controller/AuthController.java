@@ -9,6 +9,7 @@ import ma.fstt.medical_rdv.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -21,6 +22,10 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
@@ -47,9 +52,8 @@ public class AuthController {
 
         user.setNom(request.getNom());
         user.setEmail(request.getEmail());
-        user.setMotDePasse(request.getMotDePasse());
+        user.setMotDePasse(passwordEncoder.encode(request.getMotDePasse()));
         user.setTelephone(request.getTelephone());
-
         User saved = userService.save(user);
 
         return ResponseEntity.ok(Map.of(
@@ -71,7 +75,7 @@ public class AuthController {
         User user = userOpt.get();
 
         if (!user.getMotDePasse().equals(request.getMotDePasse())) {
-            return ResponseEntity.status(401).body(Map.of("message", "Email ou mot de passe incorrect."));
+           return ResponseEntity.status(401).body(Map.of("message", "Email ou mot de passe incorrect."));
         }
 
         return ResponseEntity.ok(Map.of(
